@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500&display=swap');
+
+            * {
+                font-family: 'Gothic A1', sans-serif;
+            }
+            a {
+                color:#85e4aa; 
+                -moz-transition:color .3s ease;   
+                -o-transition:color .3s ease;   
+                -ms-transition:color .3s ease;   
+                -webkit-transition:color .3s ease;   
+                transition:color .3 ease;
+            }
+            a:hover {
+                color:#a71313
+            }
+            li {
+                padding-top: 10px;
+            }
+            pre {
+                background-color : rgb(209, 209, 209);
+                padding : 20px;
+                border : 3px solid rgb(133, 133, 133);
+                border-radius: 10px;
+            }
+            hr {
+                border: double 4px rgb(99, 99, 99);
+                border-radius: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>네트워크 관리사 필기 정리</h1>
+        <hr>
+        <ol>
+            <li><a href="#router">[라우터]</a></li>
+            <li><a href="#window">[Window 2008 Server R2]</a></li>
+            <li><a href="#Linux">[Linux 문제]</a></li>
+            <li><a href="#probs">[단답형 문제]</a></li>
+        </ol>
+        <hr>
+        <h2 id="router">[라우터]</h2>
+        <pre>
+<h3>1. 확인</h3>
+1) 인터페이스 정보를 확인하라
+enable - show interface - copy r s
+
+2) 접속한 사용자를 확인하라
+enable - show user(s) - copy r s
+
+3) 라우팅 테이블을 확인하라
+enable - show ip route - copy r s
+
+4) 플래쉬를 확인하라
+enable - show flash - copy r s
+
+
+<h3>2. 변경</h3>
+1) 호스트 네임을 변경하라
+enable - config terminal - hostname ICQA - exit - copy r s
+
+2) Ethenet 0 인터페이스를 설정하고, NVRAN에 저장하시오
+http://blog.naver.com/limits2018/220429068419
+
+enable - config terminal
+interface Ethernet 0 - ip address 192.168.200.2 255.255.255.252 - ip directed-broadcast
+exit - exit - copy r s
+
+
+3) Serial 0의 대역폭을 2048k로 설정하고, NVRAM에 저장하시오
+http://blog.naver.com/limits2018/220429100392
+en - conf t
+interface serial 0 - bandwidth 2048
+exit - exit - copy r s
+
+
+4) Serial 0의 clock rate을 72k로 설정하고, NVRAM에 저장하시오
+http://blog.naver.com/limits2018/220429100392
+en - conf t
+int s0 - clock rate 72000
+exit - exit - copy r s
+
+
+5) Ethernet 0의 description을 설정하고 NVRAM에 저장하시오
+http://blog.naver.com/limits2018/220429147376
+Description : ICQA
+en - conf t
+int e0 - description ICQA
+exit - exit - copy r s
+
+
+6) Secondary 설정
+http://blog.naver.com/limits2018/220429165281
+Ethernet 0의 IP Address를 192.168.2.1/30과 192.168.3.1/30 Secondary로 설정하고 저장하시오
+en - conf t
+interface ethernet 0 - ip address 192.168.2.1 255.255.255.252 - ip address 192.168.3.1 255.255.255.252 secondary
+exit - exit - copy r s
+(추가 설명, 뒤에 30은 1이 30개 있다는 것이다)
+11111111 11111111 11111111 11111100
+255 255 255 252
+
+
+7) Default-Gateway를 설정하고 저장하시오
+http://blog.naver.com/limits2018/220429181934
+IP : 192.168.0.10
+en - conf t
+ip default-gateway 192.168.0.10
+exit - copy r s
+
+
+8) 텔넷 패스워드 설정
+http://blog.naver.com/limits2018/220429482496
+Router1 Telnet에 접근하는 Password를 "TELPass"로 설정하고, 상태를 저장하시오
+en - conf t
+line vty 0 4 - password TELPass - login
+exit - exit - copy r s
+
+9) 텔넷(콘솔) 자동종료 설정
+http://blog.naver.com/limits2018/220429502079
+telnet에 5분 50초 동안 신호가 없을 시 해당 세션을 자동으로 종료하도록 라우터를 설정하시오
+en - conf t
+line vty 0 4 - exec-timeout 05 50 - login
+exit - exit - copy r s
+
+
+10) 콘솔 패스위드 설정
+http://blog.naver.com/limits2018/220429515003
+Router1 console의 패드워드를 ICQACon으로 설정하고 저장하시오
+en - conf t
+line console 0 - login - password ICQACon
+exit - exit - copy r s
+
+
+11) 활성화 설정
+http://blog.naver.com/limits2018/220429521802
+Router2의 Interface Serial 0을 활성화시키고 저장하시오
+en - conf t
+interface serial 0 - no shutdown
+exit - exit - copy r s
+
+
+12) 호스트(도메인)네임, 패스워드 설정
+http://blog.naver.com/limits2018/220429534052
+Hostname을 network2로 변경하고, console 0의 Password를 route5로 변경하고 login하라
+en - conf t
+hostname network2 - line console 0 - password route5 - login
+exit - exit - copy r s
+도메인 네임 설정
+en - conf t
+ip domain-name AAA
+exit - copy r s
+        </pre>
+        <h2 id="window">[Window 2008 Server R2]</h2>
+        <pre>
+<ol>
+    <li>TCP / IP Setting</li>
+    <li>DNS Setting</li>
+    <li>DHCP Setting</li>
+    <li>IIS FTPServer Setting</li>
+    <li>IIS WebServer Setting</li>
+    <li>계정추가</li>
+    <li>SMTP Setting</li>
+    <li>로컬보안정책 Setting</li>
+    <li>Service Setting</li>
+</ol>
+
+1) TCP/IP Setting
+http://blog.naver.com/limits2018/220429907842
+네트워크 환경을 아래와 같이 설정하시오
+IP Address : 10101100.00010000.10010110.01110011
+Subnet Mask : 22 bit
+Default Gateway : 192.168.100.254
+DNS Server : 200.100.100.200
+추가 Gateway : 192.168.100.253
+보조 DNS Servers : 201.100.100.201
+
+이 문제의 관건은 이진법을 잘 계산하는 것이다
+
+IP Address을 먼저 풀면
+128|64|32|16|8|4|2|1 의 순서로 8bit가 맵핑된다
+따라서 10101100 은 128+32+8+4 = 172, 00010000 은 16, 10010110은 150, 01110011은 115가 된다.
+그리고 Subnet Mask는 앞에서부터 1bit로 채워진 것이라서 22bit는
+11111111.11111111.11111100.0000000으로 255.255.252.0이다
+위 값들을 로컬 영역 연결 속성의 TCP/P v4설정에 서 해주면 된다.
+
+
+2) DNS Setting
+http://blog.naver.com/limits2018/220430006406
+아래의 설정값을 참고하여 DNS서버를 설정하시오
+@ IN SOA ns.icqa.or.kr admin.icqa.or.kr (
+10 ; Serial
+15분 ; Refresh
+10분 ; Retry
+1일 ; Expire
+1시간 ); Minimum
+www IN A 192.168.100.20
+ftp IN CNAME www
+
+
+이 문제는 에뮬레이터로 따라하면 쉽게 할 순 있다. 하지만 DNS의 정방향 조회 영역에 새로운 영역을 만드는 것을 주의하면 될것 같다.
+
+
+3) DHCP Setting
+http://blog.naver.com/limits2018/220430095823
+아래와 같이 ip를 할당할 수 있는 DHCP를 설정하시오
+범위이름 : 네트워크관리사
+설명 : 한국정보통신자격협회 (미기출 문제)
+분배할 주소 범위 : 192.168.106.1 ~ 254
+제외할 주소 범위 : 192.168.106.2~25
+임대 기간 : 8일
+서브넷 마스크 : 255.255.255.0(24bit)
+게이트웨이 설정 : 192.168.106.1 (미기출 문제)
+
+예약설정 (미기출 문제)
+
+IP : 192.168.106.200
+예약이름 : Example
+MAC 주소 : ff-ff-ff-ff-ff-ff
+설명 : 예약
+모두 설정한 뒤 활성화하시오
+
+
+새 범위로 만든 후에 '아니오, 나중에 구성하겠습니다.'를 누르는 것.
+그리고 '범위'를 확장시켜서 '범위 옵션'에 라우터 설정하고 예약에서 예약을 하는 것이 포인트이다
+
+
+4) IIS FTPServer Setting - ftp
+http://blog.naver.com/limits2018/220430151482
+
+"아래"와 같이 FTP사이트를 추가 설정하시오
+
+FTP사이트 이름 : ICQA
+실제 경로: C:\inetpub\ftproot
+IP주소 : 192.168.100.10, 포트 : 2121
+엑세스 허용 : 익명 사용자(읽기권한만)
+엑세스 거부 IP주소 : 200.115.100.0/24
+최대 연결수 메시지 : 최대 접속 인원수를 초과하였습니다.
+
+24가 서브 마스크로 255.255.255.0인걸 확인한다.
+
+
+5) IIS FTPServer Setting - web
+http://blog.naver.com/limits2018/220430492638
+
+"아래"와 같이 Web사이트를 추가 설정하시오
+
+웹사이트 이름 : ICQA
+실제 경로 : C:\inetpub\webroot
+웹사이트 IP주소 : 192.168.100.10
+포트 : 80
+호스트 이름 : http://www.icqa.or.kr
+엑세스 허용 IP주소 : 192.168.100.0/24
+
+이 문제의 경우엔 특별한 것은 없고 서브넷 마스크 계산이 틀리지 않으면 된다.
+
+
+6) 계정 추가하기
+http://blog.naver.com/limits2018/220431172848
+
+"아래"와 같이 계정을 추가 설정하시오
+
+ID : ICQA
+Password : ICQAPass
+전체 이름 : 전체관리자
+암호 변경할 수 없음
+소속그룹 : Administrators
+
+천천히 풀면 풀 수 있는 문제
+
+
+7) SMTP Setting
+http://blog.naver.com/limits2018/220431319063
+
+지금 에뮬레이터에서 SMTP Setting이 사라진것으로 보인다고 한다.
+
+ip주소 : 192.168.100.102
+릴레이 제한 : 192.1168.100.11. 주소만 릴레이 가능
+로그작성기간 : 매일
+로그 내용 : 날짜, 시간, 클라이언트 IP주소, 사용자 이름 추가
+
+8) 로컬보안정책 Setting
+http://blog.naver.com/limits2018/220431336407
+
+패스워드는 최소 10일에서 최대 20일 사용
+패스워드는 3번 로그인 실패 시 30분간 계정잠금
+
+문제 안에 답이 있으니 설정을 그냥 하면 된다.
+
+
+9) Service Setting
+http://blog.naver.com/limits2018/220431349076
+2015.03.15 64회차
+
+"아래"와 같이 서비스를 설정하십시오
+
+SMTP 서비스를 사용하지 않음
+서버를 재시작해도 네트워크를 통해서 전자메일을 전송하지 않음
+
+2014.12.14 63회차
+
+"아래"와 같이 서비스를 설정하십시오
+
+원격 사용자가 Telnet을 이용하여 파일을 삭제하여 왔으나 정책이 변경되어 원격사용자가 더 이상 로그온 할 필요가 없어졋다. 해당 기능을 중지시키고, 다시 시작할 수 없게 설정하시오
+현재는 SMTP 관련된 항목이 에뮬레이터에서 사라져있어서 Telnet이 나오고 있다. 이것도 문제를 잘 확인하면 된다.
+        </pre>
+        <hr>
+        <h2 id="Linux">[Linux 문제]</h2>
+        <p>ifconfig, find, df, pwd, man 등등 리눅스 명령어에 대한 문제가 출제된다.</p>
+        <hr>
+        <h2 id="probs">[단답형 문제]</h2>
+        <pre>
+1. OSI 7계층 중 [ ]에 해당하는 것은?
+
+답:
+네트워크 계층에 해당하는 것 - RARP, ARP, ICMP, IGMP, RIP
+응용 계층에 해당하는 것 - SMTP, Telnet, FTP, HTTP
+전송 계층일 경우 - TCP, UDP
+
+
+2. IP와 Subnet Mask를 보고, 네트워크 아이디를 구하여라
+
+Ex - 1
+1) 172.168.100.2 / 19
+2) 148.120.210.12 / 18
+3) 212.254.70.180 / 25
+4) XXX.XXX.XXX.150 / 25
+
+Ex - 2
+B클래스이며, IP는 172.168.102.5 Subnet은 255.255.224.0
+
+Ex - 3
+162.128.1.1 / 18
+162.128.1.2 / 18
+....
+162.128.1.253 / 18
+162.128.1.254 / 18
+
+위 문제는 서브넷 마스크의 개념과 네트워크 아이디를 구하는 법을 잘 알고있는지를 물어보는 것이다.
+
+3 . 공중망을 사설망처럼 이용하고 ..... 회선 비용을 크게 절감하고 .... 기업통신 서비스는?
+
+답 :VPN - 가상사설망
+
+
+4 . IPv4와 IPv6을 비교하는 문제
+
+답 : IPv4는 유니캐스트, 멀티캐스트 / 8씩 총 4부분이며 32비트
+
+답 : IPv6은 애니캐스트 / 128비트
+
+
+5 . IDS(침입탐지시스템)은 크게 오용탐지와 비정상행위탐지 두 가지로 분류된다. 오용탐지에 해당하는 특징은 무엇인가?
+
+
+답 : 새로운 침입 유형은 탐지가 불가능하다. 비정상행위탐지는 저것과 반대. 새로운 침입 유형들을 탐지 가능하며 정상행위를 정의하고 이를 벗어나는 행동을 찾는다.
+
+
+6 . 네트워크 스위치의 어떤 한 포트에서 보이는 모든 네트워크 패킷 혹은 전체 VLAN의 모든 패킷들을 다른 모니터링 포트로 복제하는데 사용된다.
+
+답 : 포트 미러링
+
+(패킷 혹은 전체 VLAN의 패킷들을 다른 모니터링 포트로 복제가 포인트이다.)
+
+
+7 . 드래그 앤 드롭 문제 각 계층에 맞는 장치를 연결하시오
+
+(A) 응용계층, 표현계층, 세션계층, 전송계층 - 게이트웨이
+
+(B) 네트워크 계층 - 라우터
+
+(C) 데이터링크계층 -
+
+(D) 물리계층 - 리피터
+
+
+8 . IP 주소로 MAC 주소를 알아내는 프로토콜은 무엇인가?
+
+답 : ARP
+
+혹시 반대로 MAC주소로 IP주소를 알 수 있는것은 RARP
+
+
+9 . IP주소를 사용하는 것의 낭비를 막기 위해 모든 호스트에 공인 IP주소를 설정하는 대신, 내부적으로 사설IP를 설정하고 사용하고, 인터넷에 접속할 때만 공인IP로 변환하는 기술
+
+답 : NAT
+
+
+10 . 2개 이상의 달느, 혹은 같은 종류의 통신망을 상호 접속하여 통신망 간 정보를 주고 받을 수 있게하는 기능의 단위 또는 장치
+
+답 : 게이트웨이
+
+
+11 . 두개의 네트워크가 연결된 그림을 주고 해당 라인의 역할을 하는 장비를 드래그해서 넣는 문제
+IP (A) IP
+위 그림에서 A의 장비 이름은?
+
+답 : 라우터
+
+
+12 . 빈칸이 주어지고, 거기에 해당되는 IP를 적어넣는 문제
+
+Ex - 1
+아래는 사설망 IP에 사용되는 주소이다
+가, 나, 다에 들어갈 주소는?
+
+Class A 10.0.0.0 ~ 10.255.255.255
+Class B 172.(가).0.0 ~ 172.(나).255.255
+Class C 192.(다).0.0 ~ 192.(다).255.255
+
+답 : 가 - 16, 나 - 31, 다 - 168
+
+Ex - 2
+
+Class별 주소이다. 가, 나에 들어갈 IP주소는?
+
+Class A 0.0.0.0
+Class B 가.0.0.0
+Class C 나.0.0.0
+Class D 224.0.0.0
+Class E 240.0.0.0
+
+답 : 가 - 128, 나 - 192
+
+
+13 . OSI 7 모델 데이터링크계층 중 MAC 계층에서 일하며 두 세그먼트 사이에서 데이터링크 계층간의 패킷 전송을 담당하는 장치는?
+
+답 : 브릿지
+
+
+14 . RFID와 관계가 없는 것은?
+
+보기 - RFID리더기, 태그, 태그 안테나, Access Point
+
+답 : Access Point
+
+
+15 . 매니지먼트와 에이전트 사이에 관리정보를 주고 받기 위한 프로토콜이며, 정보교환 단위는 메시지이다.
+
+답 : SNMP
+
+
+16 . TCP/IP 기반 네트워크 상에서 서버나 라우터가 에러나 예상치 못한 사건들을 보고할 목적으로 만들어진 프로토콜로 RFC792에 정의되어 있는 프로토콜은 무엇인가?
+
+답 : ICMP
+
+
+17 . 다음은 무슨 기술에 대한 설명인가?
+
+동적디스크 볼륨 중 볼륨 자체에서 하나의 디스크 손상시 다른 하드의 Data로 손상된 부분을 복구할 수 있는 내결함성을 지원하는 볼륨. 해당 볼륨의 종류는 RAID1과 RAID 0+1이 있다.
+
+답 : 미러링
+
+
+18 . (A)와 (B)는 무엇인가?
+
+(A)는 임의로 구성된 웹사이트를 통하여 이용자의 정보를 빼가는 해킹수법의 하나이다.
+(B)는 네트워크 상의 다른 컴퓨터에 로그인하거나 원격 시스템에서 명령을 실행하고 다른 시스템으로 파일을 복사할 수 있게 해주는 응용프로그램, 또는 그 프로토콜을 의미한다.
+
+답 : (A) - 스푸핑, (B) - SSH
+
+
+19 . 다음 기술은 무엇인가
+
+'스위칭'이라는 LAN기술을 기반으로 물리적 시간만 고려되었던 LAN분야에 가상이라는 개념을 도입한 것이다.
+네트워크 구성에 대한 지리적 제한을 최소화하면서 사용자가 원하는 최대한의 논리적인 네트워크를 구성할 수 있도록 수단을 제공한다.
+
+답 : VLAN (Virtual LAN) - 가상랜
+
+
+20 . 무슨 클래스에 대한 설명인가?
+
+Class의 IP Address는 처음 1개의 Bit이 항상 0이다.
+할당가능 Network 수는 2^7, 127개이다.
+할당 가능한 Host수는 2^24 16, 777, 216개이다
+
+답 : A클래스
+
+
+21 . 서브넷 마스크 255.255.224.0 주소를 기준으로 했을 때, 사용 가능한 서브넷 수는 몇 개인가?
+
+답 : 8개
+
+
+22 . 다음은 무엇에 대한 설명인가
+
+네트워크에서 공격 서명을 찾아내어 자동으로 모종의 조치를 취함으로써 비정상적인 트래픽을 중단시키는 보안 솔루션
+수동적인 방어 개념의 침입탐지 시스템(IDS)와 달리 침입 경고 이전에 공격을 중단시키는데 초점을 두었다. 비정상 행위를 통제할 수 있다.
+
+답 : IPS - 침입차단시스템
+
+
+23 . 침입탐지시스템의 탐지기법 중 무엇인가?
+이미 발견되어 있는 공격 패턴을 미리 입력해두고, 해당하는 패턴을 탐지하는 기법. 알려진 기법 이외에는 탐지할 수 없기때문에 새로운 공격에는 비효율적이다. 다른 말로는 Signature Base나 Knowndge Base로 불리운다
+
+답 : 오용탐지 기법
+        </pre>
+    </body>
+</html>
